@@ -205,13 +205,15 @@ class InterfaceList extends Component {
           let CurrentTime = Date.parse(new Date()) / 1000; //当前时间
           let TermTime = 60 * 60 * 24 * 7; //秒 X 分 X 时 X 天
           let addTime = item.add_time; //添加时间
+          let UpTime = item.up_time;
           return (
             <Link
               to={"/project/" + item.project_id + "/interface/api/" + item._id}
             >
               <span
                 title={
-                  CurrentTime - addTime < TermTime
+                  CurrentTime - addTime < TermTime ||
+                  CurrentTime - UpTime < TermTime
                     ? "此接口在七天内有新的更新"
                     : ""
                 }
