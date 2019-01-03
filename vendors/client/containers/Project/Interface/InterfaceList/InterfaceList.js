@@ -203,22 +203,25 @@ class InterfaceList extends Component {
         width: 30,
         render: (text, item) => {
           let CurrentTime = Date.parse(new Date()) / 1000; //当前时间
-          let TermTime = 60 * 60 * 24 * 7; //秒 X 分 X 时 X 天
+          let TermTime = 60 * 60 * 24 * 7; //七天。
           let addTime = item.add_time; //添加时间
-          let UpTime = item.up_time;
+          let UpTime = item.up_time; //修改时间
           return (
             <Link
               to={"/project/" + item.project_id + "/interface/api/" + item._id}
             >
               <span
                 title={
-                  CurrentTime - addTime < TermTime ||
-                  CurrentTime - UpTime < TermTime
+                  CurrentTime - addTime < TermTime || //当前时间减去创建时间，如果时间戳小于七天，则是新接口
+                  CurrentTime - UpTime < TermTime //或当前时间减去修改时间
                     ? "此接口在七天内有新的更新"
                     : ""
                 }
                 className={
-                  CurrentTime - addTime < TermTime ? "newData path" : "path"
+                  CurrentTime - addTime < TermTime ||
+                  CurrentTime - UpTime < TermTime
+                    ? "newData path"
+                    : "path"
                 }
               >
                 {text}
