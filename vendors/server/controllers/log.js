@@ -1,9 +1,9 @@
-const logModel = require('../models/log.js');
-const yapi = require('../yapi.js');
-const baseController = require('./base.js');
-const groupModel = require('../models/group');
-const projectModel = require('../models/project');
-const interfaceModel = require('../models/interface');
+const logModel = require("../models/log.js");
+const yapi = require("../yapi.js");
+const baseController = require("./base.js");
+const groupModel = require("../models/group");
+const projectModel = require("../models/project");
+const interfaceModel = require("../models/interface");
 
 class logController extends baseController {
   constructor(ctx) {
@@ -14,12 +14,12 @@ class logController extends baseController {
     this.interfaceModel = yapi.getInst(interfaceModel);
     this.schemaMap = {
       listByUpdate: {
-        '*type': 'string',
-        '*typeid': 'number',
+        "*type": "string",
+        "*typeid": "number",
         apis: [
           {
-            method: 'string',
-            path: 'string'
+            method: "string",
+            path: "string"
           }
         ]
       }
@@ -46,13 +46,13 @@ class logController extends baseController {
       type = ctx.request.query.type,
       selectValue = ctx.request.query.selectValue;
     if (!typeid) {
-      return (ctx.body = yapi.commons.resReturn(null, 400, 'typeid不能为空'));
+      return (ctx.body = yapi.commons.resReturn(null, 400, "typeid不能为空"));
     }
     if (!type) {
-      return (ctx.body = yapi.commons.resReturn(null, 400, 'type不能为空'));
+      return (ctx.body = yapi.commons.resReturn(null, 400, "type不能为空"));
     }
     try {
-      if (type === 'group') {
+      if (type === "group") {
         let projectList = await this.projectModel.list(typeid);
         let projectIds = [],
           projectDatas = {};
@@ -68,10 +68,11 @@ class logController extends baseController {
         );
         projectLogList.forEach((item, index) => {
           item = item.toObject();
-          if (item.type === 'project') {
+          if (item.type === "project") {
             item.content =
-              `在 <a href="/project/${item.typeid}">${projectDatas[item.typeid].name}</a> 项目: ` +
-              item.content;
+              `在 <a href="/project/${item.typeid}">${
+                projectDatas[item.typeid].name
+              }</a> 项目: ` + item.content;
           }
           projectLogList[index] = item;
         });
@@ -81,7 +82,13 @@ class logController extends baseController {
           total: Math.ceil(total / limit)
         });
       } else if (type === "project") {
-        let result = await this.Model.listWithPaging(typeid, type, page, limit, selectValue);
+        let result = await this.Model.listWithPaging(
+          typeid,
+          type,
+          page,
+          limit,
+          selectValue
+        );
         let count = await this.Model.listCount(typeid, type, selectValue);
 
         ctx.body = yapi.commons.resReturn({
@@ -104,25 +111,52 @@ class logController extends baseController {
    * @example /log/list
    */
 
+  async getList(ctx) {
+    let typeid = ctx.request.query.typeid,
+      type = ctx.request.query.type;
+    if (!typeid) {
+      return (ctx.body = yapi.commons.resReturn(null, 400, "typeid不能为空"));
+    }
+    if (!type) {
+      return (ctx.body = yapi.commons.resReturn(null, 400, "type不能为空"));
+    }
+    try {
+      console.log(typeid, type, "zcy");
+      let result = await this.Model.getUpData(typeid, type);
+      console.log(result);
+      ctx.body = yapi.commons.resReturn({
+        list: result
+      });
+    } catch (err) {
+      ctx.body = yapi.commons.resReturn(null, 402, err.message);
+    }
+  }
+
   async listByUpdate(ctx) {
     let params = ctx.params;
 
     try {
       let { typeid, type, apis } = params;
       let list = [];
-      let projectDatas = await this.projectModel.getBaseInfo(typeid, 'basepath');
+      let projectDatas = await this.projectModel.getBaseInfo(
+        typeid,
+        "basepath"
+      );
       let basePath = projectDatas.toObject().basepath;
 
       for (let i = 0; i < apis.length; i++) {
         let api = apis[i];
         if (basePath) {
-          api.path = api.path.indexOf(basePath) === 0 ? api.path.substr(basePath.length) : api.path;
+          api.path =
+            api.path.indexOf(basePath) === 0
+              ? api.path.substr(basePath.length)
+              : api.path;
         }
         let interfaceIdList = await this.interfaceModel.getByPath(
           typeid,
           api.path,
           api.method,
-          '_id'
+          "_id"
         );
 
         for (let j = 0; j < interfaceIdList.length; j++) {
