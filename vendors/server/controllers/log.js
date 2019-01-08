@@ -111,27 +111,6 @@ class logController extends baseController {
    * @example /log/list
    */
 
-  async getList(ctx) {
-    let typeid = ctx.request.query.typeid,
-      type = ctx.request.query.type;
-    if (!typeid) {
-      return (ctx.body = yapi.commons.resReturn(null, 400, "typeid不能为空"));
-    }
-    if (!type) {
-      return (ctx.body = yapi.commons.resReturn(null, 400, "type不能为空"));
-    }
-    try {
-      console.log(typeid, type, "zcy");
-      let result = await this.Model.getUpData(typeid, type);
-      console.log(result);
-      ctx.body = yapi.commons.resReturn({
-        list: result
-      });
-    } catch (err) {
-      ctx.body = yapi.commons.resReturn(null, 402, err.message);
-    }
-  }
-
   async listByUpdate(ctx) {
     let params = ctx.params;
 

@@ -317,6 +317,11 @@ let routerConfig = {
       method: "post"
     },
     {
+      action: "getList",
+      path: "getList",
+      method: "post"
+    },
+    {
       action: "del",
       path: "del",
       method: "post"
@@ -392,11 +397,6 @@ let routerConfig = {
       action: "listByUpdate",
       path: "list_by_update",
       method: "post"
-    },
-    {
-      action: "getList",
-      path: "getList",
-      method: "get"
     }
   ],
   follow: [

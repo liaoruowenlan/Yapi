@@ -1,8 +1,7 @@
-const _ = require('underscore');
-const axios = require('axios');
+const _ = require("underscore");
+const axios = require("axios");
 
-
-const isNode = typeof global == 'object' && global.global === global;
+const isNode = typeof global == "object" && global.global === global;
 
 async function handle(
   res,
@@ -27,9 +26,9 @@ async function handle(
         if (findCat) {
           cat.id = findCat._id;
         } else {
-          let apipath = '/api/interface/add_cat';
+          let apipath = "/api/interface/add_cat";
           if (isNode) {
-            apipath = 'http://127.0.0.1:' + port + apipath;
+            apipath = "http://127.0.0.1:" + port + apipath;
           }
 
           let data = {
@@ -75,24 +74,26 @@ async function handle(
       });
       if (basePath) {
         data.path =
-          data.path.indexOf(basePath) === 0 ? data.path.substr(basePath.length) : data.path;
+          data.path.indexOf(basePath) === 0
+            ? data.path.substr(basePath.length)
+            : data.path;
       }
       if (
         data.catname &&
         cats[data.catname] &&
-        typeof cats[data.catname] === 'object' &&
+        typeof cats[data.catname] === "object" &&
         cats[data.catname].id
       ) {
         data.catid = cats[data.catname].id;
       }
       data.token = token;
 
-      if (dataSync !== 'normal') {
+      if (dataSync !== "normal") {
         // 开启同步功能
         count++;
-        let apipath = '/api/interface/save';
+        let apipath = "/api/interface/save";
         if (isNode) {
-          apipath = 'http://127.0.0.1:' + port + apipath;
+          apipath = "http://127.0.0.1:" + port + apipath;
         }
         data.dataSync = dataSync;
         let result = await axios.post(apipath, data);
@@ -106,9 +107,9 @@ async function handle(
       } else {
         // 未开启同步功能
         count++;
-        let apipath = '/api/interface/add';
+        let apipath = "/api/interface/add";
         if (isNode) {
-          apipath = 'http://127.0.0.1:' + port + apipath;
+          apipath = "http://127.0.0.1:" + port + apipath;
         }
         let result = await axios.post(apipath, data);
         if (result.data.errcode) {
@@ -118,14 +119,26 @@ async function handle(
           }
           if (result.data.errcode == 40033) {
             callback({ showLoading: false });
-            messageError('没有权限');
+            messageError("没有权限");
             break;
           }
         }
       }
       if (count === len) {
         callback({ showLoading: false });
-        messageSuccess(`成功导入接口 ${successNum} 个, 已存在的接口 ${existNum} 个`);
+        let params = {
+          ok: successNum,
+          fail: existNum,
+          projectId: projectId,
+          catid: data.catid
+        };
+        axios.post("/api/interface/getList", params).then(async res => {
+          console.log(res);
+        });
+
+        messageSuccess(
+          `成功导入接口 ${successNum} 个, 已存在的接口 ${existNum} 个`
+        );
       }
     }
   };

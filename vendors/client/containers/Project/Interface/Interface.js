@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { Tabs, Layout } from "antd";
 import { Route, Switch, matchPath } from "react-router-dom";
 import { connect } from "react-redux";
-import axios from "axios";
 const { Content, Sider } = Layout;
 
 import "./interface.scss";
@@ -71,19 +70,6 @@ class Interface extends Component {
     // this.state = {
     //   curkey: this.props.match.params.action === 'api' ? 'api' : 'colOrCase'
     // }
-  }
-  componentDidMount() {
-    axios
-      .get("/api/log/getList", {
-        params: {
-          typeid: 13,
-          type: "project"
-        }
-      })
-      .then(res => {
-        alert(1);
-        console.log(res);
-      });
   }
   onChange = action => {
     let params = this.props.match.params;

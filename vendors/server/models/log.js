@@ -95,20 +95,15 @@ class logModel extends baseModel {
     }, 3000);
     return name;
   }
-  getUpData(typeid, type) {
-    console.log(typeid, type, "lw");
-
+  getUpData(typeid, type, title) {
     typeid = parseInt(typeid);
     const params = {
       typeid: typeid,
-      type: type
+      type: type,
+      // title: title,
+      data: { $exists: 1 }
     };
-    console.log(params, "<<<<<<");
     let result = this.model.find(params).exec();
-    setTimeout(function() {
-      console.log(result);
-    }, 3000);
-
     return result;
   }
   listWithPagingByGroup(typeid, pidList, page, limit) {
