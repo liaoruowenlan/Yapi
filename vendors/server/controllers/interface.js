@@ -587,17 +587,13 @@ class interfaceController extends baseController {
 
   async up(ctx) {
     let params = ctx.params;
-
     if (!_.isUndefined(params.method)) {
       params.method = params.method || "GET";
       params.method = params.method.toUpperCase();
     }
-
     let id = params.id;
     params.message = params.message || "";
     params.message = params.message.replace(/\n/g, "<br>");
-    // params.res_body_is_json_schema = _.isUndefined (params.res_body_is_json_schema) ? true : params.res_body_is_json_schema;
-    // params.req_body_is_json_schema = _.isUndefined(params.req_body_is_json_schema) ?  true : params.req_body_is_json_schema;
 
     let interfaceData = await this.Model.get(id);
     if (!interfaceData) {
@@ -682,6 +678,10 @@ class interfaceController extends baseController {
     };
 
     this.catModel.get(interfaceData.catid).then(cate => {
+      let diffView2 = showDiffMsg(jsondiffpatch, formattersHtml, logData);
+      if (diffView2.length <= 0) {
+        return; // 没有变化时，不写日志
+      }
       yapi.commons.saveLog({
         content: `<a href="/user/profile/${this.getUid()}">${username}</a> 
                     更新了分类 <a href="/project/${
