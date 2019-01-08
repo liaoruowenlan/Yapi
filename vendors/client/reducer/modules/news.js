@@ -1,7 +1,6 @@
 // Actions
 const FETCH_NEWS_DATA = "yapi/news/FETCH_NEWS_DATA";
 const FETCH_MORE_NEWS = "yapi/news/FETCH_MORE_NEWS";
-const FETCH_GETUP_DATA = "yapi/news/FETCH_GETUP_DATA";
 // Reducer
 const initialState = {
   newsData: {
@@ -66,18 +65,6 @@ export function fetchNewsData(typeid, type, page, limit, selectValue) {
   return {
     type: FETCH_NEWS_DATA,
     payload: axios.get("/api/log/list", {
-      params: param
-    })
-  };
-}
-export function getupData(typeid, type) {
-  let param = {
-    typeid: typeid,
-    type: type
-  };
-  return {
-    type: FETCH_GETUP_DATA,
-    payload: axios.get("/api/log/getList", {
       params: param
     })
   };

@@ -100,8 +100,7 @@ class interfaceController extends baseController {
         {
           "*ok": "number",
           "*fail": minLengthStringField,
-          "*projectId": "number",
-          "*catid": "number"
+          "*projectId": "number"
         },
         addAndUpCommonField
       ),

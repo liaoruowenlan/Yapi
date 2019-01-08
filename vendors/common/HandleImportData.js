@@ -129,8 +129,7 @@ async function handle(
         let params = {
           ok: successNum,
           fail: existNum,
-          projectId: projectId,
-          catid: data.catid
+          projectId: parseInt(projectId)
         };
         axios.post("/api/interface/getList", params).then(async res => {
           console.log(res);
