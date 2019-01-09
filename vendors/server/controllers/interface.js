@@ -816,7 +816,7 @@ class interfaceController extends baseController {
         <div><h3>${username}导入了接口</h3>
         <p>项目名：${project.name} </p>
         <p>导入用户: ${username}</p>
-        <p>本次成功导入数据量共:${ok}条,已存在接口${fail}</p></div>
+        <p>本次成功导入数据量共:${ok}条,已存在接口${fail}条</p></div>
         </body>
         </html>`
       });
